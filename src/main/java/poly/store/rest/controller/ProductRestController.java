@@ -1,6 +1,7 @@
 package poly.store.rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import poly.store.entity.Product;
 import poly.store.service.ProductService;
@@ -17,6 +18,14 @@ public class ProductRestController {
     @GetMapping()
     public List<Product> getAll() {
         return productService.findAll();
+    }
+    @RequestMapping("user")
+    public String getUser(Authentication auth) {
+        if (auth==null){
+            return null;
+        }else {
+            return auth.getName();
+        }
     }
 
     @PostMapping

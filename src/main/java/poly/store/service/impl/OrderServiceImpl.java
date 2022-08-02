@@ -28,8 +28,6 @@ public class OrderServiceImpl implements OrderService {
     public Order create(JsonNode orderData) {
         ObjectMapper mapper = new ObjectMapper();
         Order order = mapper.convertValue(orderData,Order.class);
-
-        order.setAccount(accountRepository.findById("ALFKI").get());
         orderRepository.save(order);
 
         TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>(){};
@@ -43,5 +41,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order findById(Long id) {
         return orderRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Order> findByCus(String name) {
+        return orderRepository.findAllByAccount_Username(name);
     }
 }

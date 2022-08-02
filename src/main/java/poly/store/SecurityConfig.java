@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     String[] roles = user.getAuthorities().stream()
                             .map(er ->er.getRole().getId())
                             .collect(Collectors.toList()).toArray(new String[0]);
+
                     return User.withUsername(username).password(password).roles(roles).build();
                 }catch (NoSuchElementException e){
                     throw new UsernameNotFoundException(username + "not found!");

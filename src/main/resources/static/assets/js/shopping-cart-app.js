@@ -2,9 +2,9 @@ var app =angular.module("shopping-cart-app",[]);
 
 app.controller("shopping-cart-ctrl", function ($scope,$http){
     // QL GIOR HANG
-
     $scope.cart= {
         items:[],
+        user:"",
         //Them vao cart
         add(id){
             var item = this.items.find(item=>item.id ==id);
@@ -55,35 +55,40 @@ app.controller("shopping-cart-ctrl", function ($scope,$http){
         loadFromLocalStorage(){
             var json = localStorage.getItem("cart");
             this.items = json? JSON.parse(json):[];
-        }
-    }
-    $scope.cart.loadFromLocalStorage();
-
-    $scope.order = {
-        createDate : new Date(),
-        address:"",
-        // account:{username:$('username').text()},
-        // username:"Manh",
-        get orderDetails(){
-            return $scope.cart.items.map(item=>{
-                return {
-                    product:{id:item.id},
-                    price:item.price,
-                    quantity:item.qty
-                }
-            });
         },
-        purchase(){
-            var order = angular.copy(this);
-            //thuc hien dat hang
-            $http.post("/rest/orders",order).then(resp=>{
-                alert("Dat hang thanh cong");
-                $scope.cart.clear();
-                location.href="/order/detail/"+resp.data.id;
-            }).catch(error=>{
-                alert("Dat hang loi");
-                console.log(error)
-            })
-        }
+    },
+    $scope.cart.loadFromLocalStorage();
+    var user = document.getElementById("username");
+    var username="";
+    if (user!=null){
+        username= user.textContent;
     }
+        $scope.order = {
+            createDate : new Date(),
+            address:"",
+            account: {username:username},
+            get orderDetails(){
+                return $scope.cart.items.map(item=>{
+                    return {
+                        product:{id:item.id},
+                        price:item.price,
+                        quantity:item.qty
+                    }
+                });
+            },
+            purchase(){
+                var order = angular.copy(this);
+                //thuc hien dat hang
+                $http.post("/rest/orders",order).then(resp=>{
+                    alert("Dat hang thanh cong");
+                    $scope.cart.clear();
+                    location.href="/order/detail/"+resp.data.id;
+                }).catch(error=>{
+                    alert("Dat hang loi");
+                    console.log(error)
+                })
+            }
+        }
+
+
 })

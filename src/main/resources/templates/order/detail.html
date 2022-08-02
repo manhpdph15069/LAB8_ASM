@@ -50,11 +50,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="detail : *{orderDetails}" th:object="${detail}">
-                    <td>[[*{product.id}]]</td>
+                    <td>[[*{id}]]</td>
                     <td>[[*{product.name}]]</td>
                     <td>[[*{product.price}]]</td>
-                    <td>[[*{product.quantity}]]</td>
-                    <td>[[*{product.amount}]]</td>
+                    <td>[[*{quantity}]]</td>
+                    <td>[[*{quantity*product.price}]]</td>
                 </tr>
                 </tbody>
             </table>
