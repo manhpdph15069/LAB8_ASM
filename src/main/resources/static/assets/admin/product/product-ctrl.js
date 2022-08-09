@@ -18,7 +18,7 @@ app.controller("product-ctrl", function($scope, $http){
     $scope.initialize();
     $scope.pager = {
         page:0,
-        size:2,
+        size:10,
         get items(){
             var start = this.page * this.size;
             return $scope.items.slice(start,start +this.size);

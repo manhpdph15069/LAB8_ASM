@@ -8,11 +8,11 @@ app.controller("authority-ctrl", function($scope, $http){
             $scope.roles=resp.data;
         })
 
-        $http.get("/rest/accounts?admin=true").then(resp=>{
+        $http.get("/rest/accounts?admin=false").then(resp=>{
             $scope.admins=resp.data;
         })
 
-        $http.get("/rest/authorities?admin=true").then(resp => {
+        $http.get("/rest/authorities?admin=false").then(resp => {
             $scope.authorities = resp.data;
         }).catch(e=>{
             $location.path("/unauthorized");

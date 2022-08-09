@@ -16,7 +16,7 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <button href="#" class="btn btn-success">
+                        <button th:attr="ng-click=@{|cart.add(${id})|}" class="btn btn-success">
                             <i class="bi bi-bag-heart"></i>
                         </button>
                     </div>

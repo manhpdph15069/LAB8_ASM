@@ -19,18 +19,9 @@ public class ProductRestController {
     public List<Product> getAll() {
         return productService.findAll();
     }
-    @RequestMapping("user")
-    public String getUser(Authentication auth) {
-        if (auth==null){
-            return null;
-        }else {
-            return auth.getName();
-        }
-    }
 
     @PostMapping
     public Product create(@RequestBody Product product) {
-        System.out.println("sssssssssssssssssss");
         return productService.create(product);
     }
 
