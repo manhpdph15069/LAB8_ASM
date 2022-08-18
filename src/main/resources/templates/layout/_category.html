@@ -5,7 +5,7 @@
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item" th:each="c:${cates}">
-        <a  th:href="@{|/product/list?cid=${c.id}|}">
+        <a class="nav-link"  th:href="@{|/product/list?cid=${c.id}|}">
           [[${c.name}]]
         </a>
       </li>

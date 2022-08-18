@@ -48,39 +48,82 @@ app.controller("product-ctrl", function($scope, $http){
 
 
     $scope.create = function(){
-        var item = angular.copy($scope.form);
-        console.log(item);
-        $http.post(`/rest/products`,item).then(resp=>{
-            resp.data.createDate = new Date(resp.data.createDate)
-            $scope.items.push(resp.data);
-            $scope.reset();
-            alert("Them moi thanh cong");
-        }).catch(error=>{
-            alert("loi them sp");
-            console.log(error);
-        });
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn tạo sản phẩm này?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: `No`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                var item = angular.copy($scope.form);
+                $http.post(`/rest/products`,item).then(resp=>{
+                    resp.data.createDate = new Date(resp.data.createDate)
+                    $scope.items.push(resp.data);
+                    $scope.reset();
+                    Swal.fire('Thêm mới thành công!', '', 'success');
+                }).catch(error=>{
+                    alert("loi them sp");
+                    console.log(error);
+                });
+
+            } else if (result.isDenied) {
+                Swal.fire('Không thêm sản phẩm', '', 'info')
+            }
+        })
     }
     $scope.update = function () {
-        var item = angular.copy($scope.form);
-        $http.put(`/rest/products/${item.id}`,item).then(resp=>{
-            var index = $scope.items.findIndex(p=>p.id==item.id);
-            $scope.items[index] = item;
-            alert("Cap nhap thanh cong");
-        }).catch(e=>{
-            alert("cap nhap loi");
-            console.log(e);
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn tạo sản phẩm này?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: `No`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                var item = angular.copy($scope.form);
+                $http.put(`/rest/products/${item.id}`,item).then(resp=>{
+                    var index = $scope.items.findIndex(p=>p.id==item.id);
+                    $scope.items[index] = item;
+                    Swal.fire('Cập nhập thành công!', '', 'success');
+                }).catch(e=>{
+                    alert("cap nhap loi");
+                    console.log(e);
+                });
+
+            } else if (result.isDenied) {
+                Swal.fire('Không cập nhập sản phẩm', '', 'info')
+            }
         })
     }
     $scope.delete = function(item){
-        $http.delete(`/rest/products/${item.id}`).then(resp=>{
-            var index = $scope.items.findIndex(p=>p.id==item.id);
-            $scope.items.splice(index,1);
-            $scope.reset();
-            alert("Xoa thanh cong")
-        }).catch(e=>{
-            alert("loi xoa");
-            console.log(e);
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn xóa sản phẩm?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: `No`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                $http.delete(`/rest/products/${item.id}`).then(resp=>{
+                    var index = $scope.items.findIndex(p=>p.id==item.id);
+                    $scope.items.splice(index,1);
+                    $scope.reset();
+                    Swal.fire('Xóa thành công!', '', 'success');
+                }).catch(e=>{
+                    alert("loi xoa");
+                    console.log(e);
+                })
+            } else if (result.isDenied) {
+                Swal.fire('Không xóa sản phẩm', '', 'info')
+            }
         })
+
+
+
     }
     $scope.reset = function () {
         $scope.form = {

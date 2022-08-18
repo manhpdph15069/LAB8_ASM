@@ -1,4 +1,4 @@
-app.controller("authority-ctrl", function($scope, $http){
+app.controller("authority-ctrl", function($scope, $http, $location){
     $scope.roles=[];
     $scope.admins=[];
     $scope.authorities=[];
@@ -15,7 +15,8 @@ app.controller("authority-ctrl", function($scope, $http){
         $http.get("/rest/authorities?admin=false").then(resp => {
             $scope.authorities = resp.data;
         }).catch(e=>{
-            $location.path("/unauthorized");
+            $location.path("/unauthorize");
+
         })
     }
 
@@ -36,24 +37,51 @@ app.controller("authority-ctrl", function($scope, $http){
     }
 
     $scope.grant_authority = function (authority) {
-        $http.post(`/rest/authorities`,authority).then(resp=>{
-            $scope.authorities.push(resp.data)
-            alert("Cap quyen su dung thanh cong");
-        }).catch(e=>{
-            alert("cq loi")
-            console.log(e);
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn cấp quyền cho tài khoản này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $http.post(`/rest/authorities`,authority).then(resp=>{
+                    $scope.authorities.push(resp.data)
+                    Swal.fire('Cấp quyền thành công!', '', 'success')
+                }).catch(e=>{
+                    alert("cq loi")
+                    console.log(e);
+                });
+            }
         })
+
+
     }
     
     $scope.revoke_authority = function (authority) {
-        $http.delete(`/rest/authorities/${authority.id}`).then(resp=>{
-            var index =$scope.authorities.findIndex(a=>a.id == authority.id);
-            $scope.authorities.slice(index,1);
-            alert("Thu hoi quyen thanh cong");
-        }).catch(e=>{
-            alert("thu hoi loi")
-            console.log(e);
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn cấp quyền cho tài khoản này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $http.delete(`/rest/authorities/${authority.id}`).then(resp=>{
+                    var index =$scope.authorities.findIndex(a=>a.id == authority.id);
+                    $scope.authorities.slice(index,1);
+                    Swal.fire('Thu hồi quyền thành công!', '', 'success')
+                }).catch(e=>{
+                    alert("thu hoi loi")
+                    console.log(e);
+                });
+            }
         })
+
+
+
     }
     $scope.initialize();
 });

@@ -68,9 +68,9 @@
                 </div>
             </div>
             <div class="card-footer text-center">
-                <button ng-click="create()" class="btn btn-primary">Create</button>
-                <button ng-click="update()" class="btn btn-success">Update</button>
-                <button ng-click="delete(form)" class="btn btn-danger">Delete</button>
+                <button ng-click="create()" ng-if="form.id == null" class="btn btn-primary">Create</button>
+                <button ng-click="update()" ng-if="form.id != null" class="btn btn-success">Update</button>
+                <button ng-click="delete(form)" ng-if="form.id != null" class="btn btn-danger">Delete</button>
                 <button ng-click="reset()" class="btn btn-outline-danger">Refresh</button>
             </div>
         </div>

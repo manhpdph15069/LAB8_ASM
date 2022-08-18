@@ -1,6 +1,7 @@
 package poly.store.rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import poly.store.entity.Account;
 import poly.store.entity.Authority;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/rest/authorities")
+@PreAuthorize("hasRole('DIRE')")
 public class AuthorityRestController {
     @Autowired
     AuthorityService authorityService;

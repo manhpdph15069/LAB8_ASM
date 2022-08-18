@@ -19,12 +19,26 @@ app.controller("shopping-cart-ctrl", function ($scope,$http){
                     this.saveToLocalStorage();
                 })
             }
+            Swal.fire('Thêm vào giỏ hàng thành công');
         },
         //xoa sp khoi cart
         remove(id){
-            var index = this.items.findIndex(item=>item.id == id);
-            this.items.splice(index,1);
-            this.saveToLocalStorage();
+
+            Swal.fire({
+                title: 'Bạn chắc chắn muốn xóa?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var index = this.items.findIndex(item=>item.id == id);
+                    this.items.splice(index,1);
+                    this.saveToLocalStorage();
+                    location.reload();
+                }
+            })
         }
         ,
         //Tong sl mat hang trong gio
@@ -42,8 +56,20 @@ app.controller("shopping-cart-ctrl", function ($scope,$http){
         }
         ,
         clear(){
-            this.items= [];
-            this.saveToLocalStorage();
+            Swal.fire({
+                title: 'Bạn chắc chắn muốn xóa giỏ hàng?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if (result.isConfirmed){
+                    this.items= [];
+                    this.saveToLocalStorage();
+                    location.reload();
+                }
+            })
         }
         ,
         //Luu cart vao local storage
@@ -79,14 +105,28 @@ app.controller("shopping-cart-ctrl", function ($scope,$http){
             purchase(){
                 var order = angular.copy(this);
                 //thuc hien dat hang
-                $http.post("/rest/orders",order).then(resp=>{
-                    alert("Dat hang thanh cong");
-                    $scope.cart.clear();
-                    location.href="/order/detail/"+resp.data.id;
-                }).catch(error=>{
-                    alert("Dat hang loi");
-                    console.log(error)
+                Swal.fire({
+                    title: 'Bạn chắc chắn muốn đặt hàng?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $http.post("/rest/orders",order).then(resp=>{
+                            $scope.cart.clear();
+                            location.href="/order/detail/"+resp.data.id;
+                            Swal.fire('Đặt hàng thành công');
+                        }).catch(error=>{
+                            alert("Dat hang loi");
+                            console.log(error)
+                        })
+                    }
                 })
+
+
+
             }
         }
 
